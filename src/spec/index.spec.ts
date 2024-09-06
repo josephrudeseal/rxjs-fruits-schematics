@@ -18,17 +18,17 @@ describe('rxjs-fruits-schematics - exercise command', () => {
   });
 
   describe('when creating files', () => {
-    it('creates the right number of files.', () => {
+    it('creates the right number of files.', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: 'test' }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: 'test' }, testTree);
 
       expect(tree.files.length).toEqual(12);
     });
 
-    it('gives files the correct names.', () => {
+    it('gives files the correct names.', async () => {
       const name = 'test';
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: name }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: name }, testTree);
 
       expect(tree.files[0]).toBe(`/src/app/app-routing.module.ts`);
       expect(tree.files[1]).toBe(`/src/app/exercises/levels.json`);
@@ -46,18 +46,18 @@ describe('rxjs-fruits-schematics - exercise command', () => {
   });
 
   describe('when inserting content', () => {
-    it('updates template files correctly', () => {
+    it('updates template files correctly', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: 'test' }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: 'test' }, testTree);
       const exerciseFilePath = tree.files[2];
       const exerciseFileContent = tree.read(exerciseFilePath);
 
       expect(exerciseFileContent).toContain('export class TestExercise');
     });
 
-    it('add a new route to the app-routing module', () => {
+    it('add a new route to the app-routing module', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: 'test' }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: 'test' }, testTree);
       const appRouterModuleContent = tree.read('./src/app/app-routing.module.ts');
 
       // console.log(appRouterModuleContent?.toString());
@@ -65,9 +65,9 @@ describe('rxjs-fruits-schematics - exercise command', () => {
       expect(appRouterModuleContent).toContain(`{ path: 'test', loadChildren: () => import('./exercises/test/test.module').then(m => m.TestModule) }`);
     });
 
-    it('should create a new level entry in levels.json', () => {
+    it('should create a new level entry in levels.json', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: 'test' }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: 'test' }, testTree);
       const levelsContent = JSON.parse(tree.read('./src/app/exercises/levels.json')?.toString() || '');
 
       expect(levelsContent).toContain({
@@ -78,17 +78,17 @@ describe('rxjs-fruits-schematics - exercise command', () => {
       });
     });
 
-    it('should create a new translation entry in de.json', () => {
+    it('should create a new translation entry in de.json', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: 'test' }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: 'test' }, testTree);
       const levelsContent = JSON.parse(tree.read('./src/assets/i18n/de.json')?.toString() || '');
 
       expect(levelsContent.EXERCISES.TEST.RECIPEDESCRIPTION).toEqual("lorem ipsum.");
     });
 
-    it('should create a new translation entry in en.json', () => {
+    it('should create a new translation entry in en.json', async () => {
       const runner = new SchematicTestRunner('schematics', collectionPath);
-      const tree = runner.runSchematic('exercise', { name: 'test' }, testTree);
+      const tree = await runner.runSchematic('exercise', { name: 'test' }, testTree);
       const levelsContent = JSON.parse(tree.read('./src/assets/i18n/en.json')?.toString() || '');
 
       expect(levelsContent.EXERCISES.TEST.RECIPEDESCRIPTION).toEqual("lorem ipsum.");
